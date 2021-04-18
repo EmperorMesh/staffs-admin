@@ -1,6 +1,21 @@
-<?php session_start()?>
+<?php session_start() ?>
+<?php include "db.php"; ?>
+<?php
+if (isset($_POST['add_venue'])) {
+	$name = $_POST['name'];
+	$description = $_POST['description'];
+
+	$addVenue = "INSERT INTO venues (name,description) VALUE(:name,:description)";
+	$addVenue = $pdo->prepare($addVenue);
+	$addVenue->bindValue(':name', $name);
+	$addVenue->bindValue(':description', $description);
+	$addVenue->execute();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -17,13 +32,16 @@
 	<link href="vendor/clock-picker/clockpicker.css" rel="stylesheet"><!-- RuangAdmin CSS -->
 	<link href="css/ruang-admin.min.css" rel="stylesheet">
 </head>
+
 <body id="page-top">
 	<div id="wrapper">
-		<?php include "bars/sidebar.php"; ?><!-- Sidebar -->
+		<?php include "bars/sidebar.php"; ?>
+		<!-- Sidebar -->
 		<div class="d-flex flex-column" id="content-wrapper">
 			<div id="content">
 				<!-- TopBar -->
-				<?php include "bars/topbar.php"; ?><!-- Topbar -->
+				<?php include "bars/topbar.php"; ?>
+				<!-- Topbar -->
 				<!-- Container Fluid-->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -41,152 +59,156 @@
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">Add Venue</h6>
-                                </div>
-                                
-								<div class="card-body">
-                                    
-                                <div class="row">
-									<div class="col-md-6">
-                                        <label for="">Name</label> 
-                                        <input aria-describedby="" class="form-control" id="" placeholder="Name" type="text">
-                                    </div>
+								</div>
 
-                                    <div class="col-md-6">
-                                        <label for="">Description</label> 
-                                        <input aria-describedby="" class="form-control" id="" placeholder="Description" type="text">
-                                    </div>
-                                </div><br>
-                                
-                                <button type="submit" class="btn btn-primary">Add Venue</button>
-                                </div>           
-                            </div> 
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-6">
+											<form method="post" action="">
+												<label for="">Name</label>
+												<input aria-describedby="" class="form-control" id="" placeholder="Name" name="name" type="text">
+										</div>
+
+										<div class="col-md-6">
+											<label for="">Description</label>
+											<input aria-describedby="" class="form-control" id="" placeholder="Description" name="description" type="text">
+										</div>
+									</div><br>
+									<button name="add_venue" class="btn btn-primary">Add Venue</button>
+									</form>
+								</div>
+							</div>
 						</div>
-					</div><!--Row-->
-				</div><!---Container Fluid-->
+					</div>
+					<!--Row-->
+				</div>
+				<!---Container Fluid-->
 			</div><!-- Footer -->
-			<?php include "bars/footer.php"; ?><!-- Footer -->
+			<?php include "bars/footer.php"; ?>
+			<!-- Footer -->
 		</div>
 	</div><!-- Scroll to top -->
-	 <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a> 
+	<a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
 	<script src="vendor/jquery/jquery.min.js">
-	</script> 
+	</script>
 	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js">
-	</script> 
+	</script>
 	<script src="vendor/jquery-easing/jquery.easing.min.js">
 	</script> <!-- Select2 -->
-	 
+
 	<script src="vendor/select2/dist/js/select2.min.js">
 	</script> <!-- Bootstrap Datepicker -->
-	 
+
 	<script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js">
 	</script> <!-- Bootstrap Touchspin -->
-	 
+
 	<script src="vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js">
 	</script> <!-- ClockPicker -->
-	 
+
 	<script src="vendor/clock-picker/clockpicker.js">
 	</script> <!-- RuangAdmin Javascript -->
-	 
+
 	<script src="js/ruang-admin.min.js">
 	</script> <!-- Javascript for this page -->
-	 
+
 	<script>
-	   $(document).ready(function () {
+		$(document).ready(function() {
 
 
-	     $('.select2-single').select2();
+			$('.select2-single').select2();
 
-	     // Select2 Single  with Placeholder
-	     $('.select2-single-placeholder').select2({
-	       placeholder: "Select a Province",
-	       allowClear: true
-	     });      
+			// Select2 Single  with Placeholder
+			$('.select2-single-placeholder').select2({
+				placeholder: "Select a Province",
+				allowClear: true
+			});
 
-	     // Select2 Multiple
-	     $('.select2-multiple').select2();
+			// Select2 Multiple
+			$('.select2-multiple').select2();
 
-	     // Bootstrap Date Picker
-	     $('#simple-date1 .input-group.date').datepicker({
-	       format: 'dd/mm/yyyy',
-	       todayBtn: 'linked',
-	       todayHighlight: true,
-	       autoclose: true,        
-	     });
+			// Bootstrap Date Picker
+			$('#simple-date1 .input-group.date').datepicker({
+				format: 'dd/mm/yyyy',
+				todayBtn: 'linked',
+				todayHighlight: true,
+				autoclose: true,
+			});
 
-	     $('#simple-date2 .input-group.date').datepicker({
-	       startView: 1,
-	       format: 'dd/mm/yyyy',        
-	       autoclose: true,     
-	       todayHighlight: true,   
-	       todayBtn: 'linked',
-	     });
+			$('#simple-date2 .input-group.date').datepicker({
+				startView: 1,
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true,
+				todayBtn: 'linked',
+			});
 
-	     $('#simple-date3 .input-group.date').datepicker({
-	       startView: 2,
-	       format: 'dd/mm/yyyy',        
-	       autoclose: true,     
-	       todayHighlight: true,   
-	       todayBtn: 'linked',
-	     });
+			$('#simple-date3 .input-group.date').datepicker({
+				startView: 2,
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true,
+				todayBtn: 'linked',
+			});
 
-	     $('#simple-date4 .input-daterange').datepicker({        
-	       format: 'dd/mm/yyyy',        
-	       autoclose: true,     
-	       todayHighlight: true,   
-	       todayBtn: 'linked',
-	     });    
+			$('#simple-date4 .input-daterange').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true,
+				todayBtn: 'linked',
+			});
 
-	     // TouchSpin
+			// TouchSpin
 
-	     $('#touchSpin1').TouchSpin({
-	       min: 0,
-	       max: 100,                
-	       boostat: 5,
-	       maxboostedstep: 10,        
-	       initval: 0
-	     });
+			$('#touchSpin1').TouchSpin({
+				min: 0,
+				max: 100,
+				boostat: 5,
+				maxboostedstep: 10,
+				initval: 0
+			});
 
-	     $('#touchSpin2').TouchSpin({
-	       min:0,
-	       max: 100,
-	       decimals: 2,
-	       step: 0.1,
-	       postfix: '%',
-	       initval: 0,
-	       boostat: 5,
-	       maxboostedstep: 10
-	     });
+			$('#touchSpin2').TouchSpin({
+				min: 0,
+				max: 100,
+				decimals: 2,
+				step: 0.1,
+				postfix: '%',
+				initval: 0,
+				boostat: 5,
+				maxboostedstep: 10
+			});
 
-	     $('#touchSpin3').TouchSpin({
-	       min: 0,
-	       max: 100,
-	       initval: 0,
-	       boostat: 5,
-	       maxboostedstep: 10,
-	       verticalbuttons: true,
-	     });
+			$('#touchSpin3').TouchSpin({
+				min: 0,
+				max: 100,
+				initval: 0,
+				boostat: 5,
+				maxboostedstep: 10,
+				verticalbuttons: true,
+			});
 
-	     $('#clockPicker1').clockpicker({
-	       donetext: 'Done'
-	     });
+			$('#clockPicker1').clockpicker({
+				donetext: 'Done'
+			});
 
-	     $('#clockPicker2').clockpicker({
-	       autoclose: true
-	     });
+			$('#clockPicker2').clockpicker({
+				autoclose: true
+			});
 
-	     let input = $('#clockPicker3').clockpicker({
-	       autoclose: true,
-	       'default': 'now',
-	       placement: 'top',
-	       align: 'left',
-	     });
+			let input = $('#clockPicker3').clockpicker({
+				autoclose: true,
+				'default': 'now',
+				placement: 'top',
+				align: 'left',
+			});
 
-	     $('#check-minutes').click(function(e){        
-	       e.stopPropagation();
-	       input.clockpicker('show').clockpicker('toggleView', 'minutes');
-	     });
+			$('#check-minutes').click(function(e) {
+				e.stopPropagation();
+				input.clockpicker('show').clockpicker('toggleView', 'minutes');
+			});
 
-	   });
+		});
 	</script>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-<?php session_start()?>
+<?php session_start() ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@
 
 <body id="page-top">
   <div id="wrapper">
-  <?php include "bars/sidebar.php"; ?>
+    <?php include "bars/sidebar.php"; ?>
     <!-- Sidebar -->
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
@@ -38,7 +38,7 @@
           </div>
 
           <div class="row mb-3">
-       
+
             <div class="col-xl-4 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
@@ -46,17 +46,17 @@
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-uppercase mb-1">Users</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800">40,000</div>
-                     
+
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-users fa-2x text-info"></i>
-                      
+
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div class="col-xl-4 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
@@ -64,7 +64,7 @@
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-uppercase mb-1">Trainings</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800">650</div>
-                      
+
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-calendar fa-2x text-primary"></i>
@@ -73,7 +73,7 @@
                 </div>
               </div>
             </div>
-        
+
             <div class="col-xl-4 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
@@ -81,37 +81,37 @@
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-uppercase mb-1">Venues</div>
                       <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">366</div>
-                     
+
                     </div>
                     <div class="col-auto">
-                  
+
                       <i class="fas fa-comments fa-2x text-warning"></i>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          
-            
+
+
+          </div>
+          <!---Container Fluid-->
         </div>
-        <!---Container Fluid-->
+        <!-- Footer -->
+        <?php include "bars/footer.php"; ?>
+        <!-- Footer -->
       </div>
-      <!-- Footer -->
-      <?php include "bars/footer.php"; ?>
-      <!-- Footer -->
     </div>
-  </div>
 
-  <!-- Scroll to top -->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+    <!-- Scroll to top -->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
 
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-  <script src="js/ruang-admin.min.js"></script>
-  
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/ruang-admin.min.js"></script>
+
 </body>
 
 </html>

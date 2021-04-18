@@ -1,4 +1,26 @@
-<?php session_start()?>
+<?php include 'db.php'; ?>
+
+<?php
+if (isset($_POST['submit'])) {
+  $username = trim($_POST['username']);
+  $password = trim($_POST['password']);
+  $sql = $pdo->prepare("SELECT * FROM users WHERE username = :username AND password = :password");
+  $sql->bindParam(':username', $username);
+  $sql->bindValue(':password', $password);
+  $sql->execute();
+  if ($sql->rowCount() > 0) {
+    $data = $sql->fetch();
+    if ($data["role"] == 1) {
+      header("Location:./dashboard.php");
+    } else {
+      header("Location:staff-dashboard.php");
+    }
+  } else {
+    echo "wrong username or password";
+  }
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,23 +53,22 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Login</h1>
                   </div>
-                  <form class="user">
+                  <form class="user" method="post" action="">
                     <div class="form-group">
-                      <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
-                        placeholder="Username">
+                      <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Username" name="username">
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password">
+                      <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password" name="password">
                     </div>
                     <div class="form-group">
                       <div class="custom-control custom-checkbox small" style="line-height: 1.5rem;">
                         <input type="checkbox" class="custom-control-input" id="customCheck">
-                        <label class="custom-control-label" for="customCheck">Remember
-                          Me</label>
+                        <label class="custom-control-label" for="customCheck">Remember -->
+                          Me</label> -->
                       </div>
                     </div>
                     <div class="form-group">
-                      <a href="dashboard.php" class="btn btn-primary btn-block">Login</a>
+                      <button class="btn btn-primary btn-block" name="submit">Login</button>
                     </div>
                   </form>
                   <div class="text-center">
