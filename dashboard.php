@@ -1,4 +1,5 @@
 <?php session_start() ?>
+<?php include "db.php"; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +46,15 @@
                   <div class="row align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-uppercase mb-1">Users</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">40,000</div>
+                      <?php
+                      $users = $pdo->prepare("SELECT * FROM user WHERE user_id = user_id");
+                      $users->execute();
+                      $all_Users = $users->rowCount();
+                      echo " <div class='h5 mb-0 font-weight-bold text-gray-800'>{$all_Users}</div>";
 
+
+
+                      ?>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-users fa-2x text-info"></i>
@@ -63,7 +71,15 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-uppercase mb-1">Trainings</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">650</div>
+                      <?php
+                      $users = $pdo->prepare("SELECT * FROM training");
+                      $users->execute();
+                      if ($users->rowCount() > 0) {
+                        $all_trainings = $users->rowCount();
+                        echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$all_trainings</div>";
+                      }
+
+                      ?>
 
                     </div>
                     <div class="col-auto">
@@ -80,8 +96,16 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-uppercase mb-1">Venues</div>
-                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">366</div>
 
+                      <?php
+                      $users = $pdo->prepare("SELECT * FROM training");
+                      $users->execute();
+                      if ($users->rowCount() > 0) {
+                        $all_venues = $users->rowCount();
+                        echo "<div class='h5 mb-0 mr-3 font-weight-bold text-gray-800'>$all_venues</div>";
+                      }
+
+                      ?>
                     </div>
                     <div class="col-auto">
 

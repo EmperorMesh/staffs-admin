@@ -1,6 +1,38 @@
  <?php session_start() ?>
  <?php include "db.php"; ?>
+ <?php
 
+
+	if (isset($_GET["check"])) {
+		$id = $_GET["check"];
+		$sql = $pdo->prepare("SELECT * FROM training WHERE id=$id");
+		$sql->execute();
+		while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+			$name = $row['name'];
+			$training_date = $row['training_date'];
+			$training_time = $row['training_time'];
+			$no_of_participant = $row['no_of_participant'];
+		}
+		header('Content-Type: application/json');
+		http_response_code(200);
+		echo json_encode(compact('name', 'training_time', 'training_date', 'no_of_participant'));
+		exit;
+	}
+
+	if (isset($_POST["enrol"])) {
+		$name = $_POST['name'];
+		$date = $_POST['training_date'];
+		$time = $_POST['training_time'];
+		$participant = $_POST['no_of_participant'];
+		$insert_training = "INSERT INTO enrol (name,training_date,training_time,no_of_participant) VALUE(:name,:training_date,:training_time,:no_of_participant)";
+		$insert_train = $pdo->prepare($insert_training);
+		$insert_train->bindValue(":name", $name);
+		$insert_train->bindValue(":training_date", $date);
+		$insert_train->bindValue(":training_time", $time);
+		$insert_train->bindValue(":no_of_participant", $participant);
+		$insert_train->execute();
+	}
+	?>
  <!DOCTYPE html>
  <html lang="en">
 
@@ -51,42 +83,13 @@
  									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
  										<h6 class="m-0 font-weight-bold text-primary">Enrol Training</h6>
  									</div>
-
- 									<?php
-
-										if (isset($_GET["check"])) {
-											$id = $$_GET["check"];
-											$sql = $pdo->prepare("SELECT * FROM training WHERE id=$id");
-											$sql->execute();
-											while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-												$name = $row['name'];
-												$training_date = $row['training_date'];
-												$training_time = $row['training_time'];
-												$no_of_participant = $row['no_of_participant'];
-											}
-										}
-										if (isset($_POST['enrol'])) {
-											$name = $_POST['name'];
-											$training_date = $_POST['training_date'];
-											$training_time = $_POST['training_time'];
-											$no_of_participant = $_POST['no_of_participant'];
-
-											$insert = "INSERT INTO enrol(name,training_date,training_time,participant) VALUE(:name,:training_date,training_time:no_of_participant)";
-											$insert = $pdo->prepare($insert);
-											$insert->bindValue(':name', $name);
-											$insert->bindValue(':training_date', $training_date);
-											$insert->bindValue(':training_time', $training_time);
-											$insert->bindValue(':no_of_participant', $no_of_participant);
-											$insert->execute();
-										}
-										?>
-
  									<div class="card-body">
  										<div class="row">
 
  											<div class="col-md-6">
  												<label for="">Name</label>
  												<select class="form-control" id="check" name="name" value="">
+ 													<option>---Select Training----</option>
  													<?php
 														$query = $pdo->prepare("SELECT * FROM training");
 														$query->execute();
@@ -101,18 +104,18 @@
  											</div>
  											<div class="col-md-6">
  												<label for="">Date</label>
- 												<input aria-describedby="" class="form-control" id="" placeholder="Date" type="date" name='training_date' value="<?php echo $training_date; ?>" readonly="readonly">
+ 												<input aria-describedby="" class="form-control" id="date" placeholder="Date" type="text" name='training_date' value="" readonly="readonly">
  											</div>
  										</div><br>
 
  										<div class="row">
  											<div class="col-md-6">
  												<label for="">Time</label>
- 												<input aria-describedby="" class="form-control" id="" placeholder="Time" type="time" name='training_time' value="<?php $training_time; ?>" readonly="readonly">
+ 												<input aria-describedby="" class="form-control" id="time" placeholder="Time" type="text" name='training_time' value="" readonly="readonly">
  											</div>
  											<div class="col-md-6">
  												<label for="">No. of Participants</label>
- 												<input aria-describedby="" class="form-control" id="" placeholder="Max. Participants" name='no_of_participant' value="<?php echo $no_of_participant; ?>" type="text" readonly="readonly">
+ 												<input aria-describedby="" class="form-control" id="nop" placeholder="Max. Participants" name='no_of_participant' value="" type="text" readonly="readonly">
  											</div>
 
  										</div><br>
@@ -155,109 +158,109 @@
  	</script> <!-- Javascript for this page -->
 
  	<script>
- 		$(document).ready(function() {
+ 		$('#check').on('change', (function() {
+ 			var check = $(this).val();
+ 			console.log('check: ', check);
+ 			var request = $.get({
+ 				url: "http://localhost/zojatech/enrol-training.php?check=" + check,
+ 			}).done(function(data) {
+ 				const date = document.getElementById("date").value = data.training_date;
+ 				const time = document.getElementById("time").value = data.training_time;
+ 				const no_part = document.getElementById("nop").value = data.no_of_participant;
+ 			}).fail(function(error) {
+ 				console.log(err)
+ 			})
+ 		}))
 
- 			$('#check').on('change', (function() {
- 				var check = $(this).val();
- 				console.log($.get);
- 				$.ajax({
- 					url: "http://localhost/zojatech/enrol-training.php?check=" + check
- 				})
- 			}))
+ 		$('.select2-single').select2()
+ 		// Select2 Single  with Placeholder
+ 		$('.select2-single-placeholder').select2({
+ 			placeholder: "Select a Province",
+ 			allowClear: true
+ 		});
 
+ 		// Select2 Multiple
+ 		$('.select2-multiple').select2();
 
- 			$('.select2-single').select2();
+ 		// Bootstrap Date Picker
+ 		$('#simple-date1 .input-group.date').datepicker({
+ 			format: 'dd/mm/yyyy',
+ 			todayBtn: 'linked',
+ 			todayHighlight: true,
+ 			autoclose: true,
+ 		});
 
- 			// Select2 Single  with Placeholder
- 			$('.select2-single-placeholder').select2({
- 				placeholder: "Select a Province",
- 				allowClear: true
- 			});
+ 		$('#simple-date2 .input-group.date').datepicker({
+ 			startView: 1,
+ 			format: 'dd/mm/yyyy',
+ 			autoclose: true,
+ 			todayHighlight: true,
+ 			todayBtn: 'linked',
+ 		});
 
- 			// Select2 Multiple
- 			$('.select2-multiple').select2();
+ 		$('#simple-date3 .input-group.date').datepicker({
+ 			startView: 2,
+ 			format: 'dd/mm/yyyy',
+ 			autoclose: true,
+ 			todayHighlight: true,
+ 			todayBtn: 'linked',
+ 		});
 
- 			// Bootstrap Date Picker
- 			$('#simple-date1 .input-group.date').datepicker({
- 				format: 'dd/mm/yyyy',
- 				todayBtn: 'linked',
- 				todayHighlight: true,
- 				autoclose: true,
- 			});
+ 		$('#simple-date4 .input-daterange').datepicker({
+ 			format: 'dd/mm/yyyy',
+ 			autoclose: true,
+ 			todayHighlight: true,
+ 			todayBtn: 'linked',
+ 		});
 
- 			$('#simple-date2 .input-group.date').datepicker({
- 				startView: 1,
- 				format: 'dd/mm/yyyy',
- 				autoclose: true,
- 				todayHighlight: true,
- 				todayBtn: 'linked',
- 			});
+ 		// TouchSpin
 
- 			$('#simple-date3 .input-group.date').datepicker({
- 				startView: 2,
- 				format: 'dd/mm/yyyy',
- 				autoclose: true,
- 				todayHighlight: true,
- 				todayBtn: 'linked',
- 			});
+ 		$('#touchSpin1').TouchSpin({
+ 			min: 0,
+ 			max: 100,
+ 			boostat: 5,
+ 			maxboostedstep: 10,
+ 			initval: 0
+ 		});
 
- 			$('#simple-date4 .input-daterange').datepicker({
- 				format: 'dd/mm/yyyy',
- 				autoclose: true,
- 				todayHighlight: true,
- 				todayBtn: 'linked',
- 			});
+ 		$('#touchSpin2').TouchSpin({
+ 			min: 0,
+ 			max: 100,
+ 			decimals: 2,
+ 			step: 0.1,
+ 			postfix: '%',
+ 			initval: 0,
+ 			boostat: 5,
+ 			maxboostedstep: 10
+ 		});
 
- 			// TouchSpin
+ 		$('#touchSpin3').TouchSpin({
+ 			min: 0,
+ 			max: 100,
+ 			initval: 0,
+ 			boostat: 5,
+ 			maxboostedstep: 10,
+ 			verticalbuttons: true,
+ 		});
 
- 			$('#touchSpin1').TouchSpin({
- 				min: 0,
- 				max: 100,
- 				boostat: 5,
- 				maxboostedstep: 10,
- 				initval: 0
- 			});
+ 		$('#clockPicker1').clockpicker({
+ 			donetext: 'Done'
+ 		});
 
- 			$('#touchSpin2').TouchSpin({
- 				min: 0,
- 				max: 100,
- 				decimals: 2,
- 				step: 0.1,
- 				postfix: '%',
- 				initval: 0,
- 				boostat: 5,
- 				maxboostedstep: 10
- 			});
+ 		$('#clockPicker2').clockpicker({
+ 			autoclose: true
+ 		});
 
- 			$('#touchSpin3').TouchSpin({
- 				min: 0,
- 				max: 100,
- 				initval: 0,
- 				boostat: 5,
- 				maxboostedstep: 10,
- 				verticalbuttons: true,
- 			});
+ 		let input = $('#clockPicker3').clockpicker({
+ 			autoclose: true,
+ 			'default': 'now',
+ 			placement: 'top',
+ 			align: 'left',
+ 		});
 
- 			$('#clockPicker1').clockpicker({
- 				donetext: 'Done'
- 			});
-
- 			$('#clockPicker2').clockpicker({
- 				autoclose: true
- 			});
-
- 			let input = $('#clockPicker3').clockpicker({
- 				autoclose: true,
- 				'default': 'now',
- 				placement: 'top',
- 				align: 'left',
- 			});
-
- 			$('#check-minutes').click(function(e) {
- 				e.stopPropagation();
- 				input.clockpicker('show').clockpicker('toggleView', 'minutes');
- 			});
-
+ 		$('#check-minutes').click(function(e) {
+ 			e.stopPropagation();
+ 			input.clockpicker('show').clockpicker('toggleView', 'minutes');
  		});
  	</script>
  </body>

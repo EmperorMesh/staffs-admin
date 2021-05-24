@@ -1,4 +1,5 @@
-<?php session_start()?>
+<?php session_start() ?>
+<?php include 'db.php' ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +20,7 @@
 
 <body id="page-top">
   <div id="wrapper">
-  <?php include "bars/staff-sidebar.php"; ?>
+    <?php include "bars/staff-sidebar.php"; ?>
     <!-- Sidebar -->
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
@@ -37,48 +38,66 @@
             </ol>
           </div>
 
-          
-             <!-- All Trainings -->
-            <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Enrolled Trainings</h6>
-                  <a class="m-0 float-right btn btn-danger btn-sm" href="enrol-training.php">+ Enrol New Training </a>
-                </div>
-                <div class="table-responsive p-3">
-                  <table class="table align-items-center table-flush table-hover" id="dataTableHover">
-                    <thead class="thead-light">
+
+          <!-- All Trainings -->
+          <div class="col-lg-12">
+            <div class="card mb-4">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Enrolled Trainings</h6>
+                <a class="m-0 float-right btn btn-danger btn-sm" href="enrol-training.php">+ Enrol New Training </a>
+              </div>
+              <div class="table-responsive p-3">
+                <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+                  <thead class="thead-light">
+                    <?php
+                    $getenroled = $pdo->prepare('SELECT * FROM enrol');
+                    $getenroled->execute();
+                    ?>
                     <tr>
-                        <th>S/N</th>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>No. of Participants</th>
-                      </tr>
-                    </thead>
-                    <tfoot>
+                      <th>S/N</th>
+                      <th>Name</th>
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>No. of Participants</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
                     <tr>
-                        <th>S/N</th>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>No. of Participants</th>
-                      </tr>
-                    </tfoot>
-                    <tbody>
-                    <tr>
-                        <td>01</td>
-                        <td>Ipsum lorem</td>
-                        <td>Ipsum Lorem</td>
-                        <td>Ipsum Lorem</td>
-                        <td>Ipsum Lorem</td>
-                    </tr>                      
-                    </tbody>
-                  </table>
-                </div>
+                      <th>S/N</th>
+                      <th>Name</th>
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>No. of Participants</th>
+                      <th>Delete</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <?php
+                    while ($row = $getenroled->fetch()) {
+                      $id = $row['id'];
+                      $name = $row['name'];
+                      $date = $row['training_date'];
+                      $time = $row['training_time'];
+                      $participant = $row['no_of_participant'];
+
+                      echo "<tr>";
+                      echo "<td>$id</td>";
+                      echo "<td>$name</td>";
+                      echo "<td>$date</td>";
+                      echo "<td>$time</td>";
+                      echo "<td>$participant</td>";
+                      echo "<td><a href='edit-training.php?edit_training=$id'><button class='btn btn-primary '>Edit</td></button>";
+                      echo "<td><a OnClientClick=\" javascript:return comfirm('Do yo want to delete');\"href='all-trainings.php?delete=$id'><button class='btn btn-danger'>Delete</td></button>";
+                      echo "</tr>";
+                    }
+                    ?>
+                  </tbody>
+                </table>
               </div>
             </div>
-         
+          </div>
+
         </div>
         <!---Container Fluid-->
       </div>
@@ -98,14 +117,14 @@
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="js/ruang-admin.min.js"></script>
   <script src="vendor/chart.js/Chart.min.js"></script>
-  <script src="js/demo/chart-area-demo.js"></script> 
+  <script src="js/demo/chart-area-demo.js"></script>
   <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
- 
+
   <!-- Page level custom scripts -->
   <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
     });

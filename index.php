@@ -1,10 +1,11 @@
 <?php include 'db.php'; ?>
+<?php session_start() ?>
 
 <?php
 if (isset($_POST['submit'])) {
   $username = trim($_POST['username']);
   $password = trim($_POST['password']);
-  $sql = $pdo->prepare("SELECT * FROM users WHERE username = :username AND password = :password");
+  $sql = $pdo->prepare("SELECT * FROM user WHERE username = :username AND password = :password");
   $sql->bindParam(':username', $username);
   $sql->bindValue(':password', $password);
   $sql->execute();
@@ -12,8 +13,12 @@ if (isset($_POST['submit'])) {
     $data = $sql->fetch();
     if ($data["role"] == 1) {
       header("Location:./dashboard.php");
+      $_SESSION['username'] = $username;
+      $_SESSION['password'] = $password;
     } else {
       header("Location:staff-dashboard.php");
+      $_SESSION['username'] = $username;
+      $_SESSION['password'] = $password;
     }
   } else {
     echo "wrong username or password";

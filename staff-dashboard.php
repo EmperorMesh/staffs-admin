@@ -1,4 +1,5 @@
 <?php session_start() ?>
+<?php include 'db.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,9 +35,6 @@
               <ol class="breadcrumb">Dashboard
             </h1>
 
-
-            <li class="breadcrumb-item"><a href="./">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><a href="logout.php">logout</a></li>
             </ol>
           </div>
 
@@ -46,8 +44,15 @@
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-uppercase mb-1"> Enrolled Trainings</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">650</div>
+                    <?php
+                    $enrol = $pdo->prepare("SELECT * FROM enrol");
+                    $enrol->execute();
+                    if ($enrol->rowCount() > 0) {
+                      $all_enrolled = $enrol->rowCount();
+                      echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$all_enrolled</div>";
+                    }
 
+                    ?>
                   </div>
                   <div class="col-auto">
                     <i class="fas fa-calendar fa-2x text-primary"></i>

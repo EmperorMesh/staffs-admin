@@ -90,7 +90,7 @@
                       echo "<td>$time</td>";
                       echo "<td>$participant</td>";
                       echo "<td><a href='edit-training.php?edit_training=$id'><button class='btn btn-primary '>Edit</td></button>";
-                      echo "<td><a href='all-trainings.php?delete=$id'><button class='btn btn-danger'>Delete</td></button>";
+                      echo "<td><a OnClientClick=\" javascript:return comfirm('Do yo want to delete');\"href='all-trainings.php?delete=$id'><button class='btn btn-danger'>Delete</td></button>";
                       echo "</tr>";
                     }
                     ?>
